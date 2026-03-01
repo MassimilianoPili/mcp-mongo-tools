@@ -8,11 +8,11 @@ Spring Boot starter providing MCP tools for MongoDB operations. Supports multi-i
 <dependency>
     <groupId>io.github.massimilianopili</groupId>
     <artifactId>mcp-mongo-tools</artifactId>
-    <version>0.0.1</version>
+    <version>0.1.0</version>
 </dependency>
 ```
 
-Requires Java 17+ and Spring AI 1.0.0+.
+Requires Java 21+ and Spring AI 1.0.0+.
 
 ## Tools
 
@@ -47,7 +47,7 @@ MCP_MONGO_LOGS_URI=mongodb://host2:27017/logs
 
 ## Requirements
 
-- Java 17+
+- Java 21+
 - Spring Boot 3.4+
 - Spring AI 1.0.0+
 - Spring Data MongoDB
