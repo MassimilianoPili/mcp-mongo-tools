@@ -23,13 +23,13 @@ public class MongoDbTools {
     }
 
     @Tool(name = "mongo_find",
-          description = "Cerca documenti in una collezione MongoDB. Il filtro e la proiezione usano la sintassi JSON di MongoDB. Default: max 50 documenti.")
+          description = "Finds documents in a MongoDB collection. Filter and projection use MongoDB JSON syntax. Default: max 50 documents.")
     public List<Map<String, Object>> find(
-            @ToolParam(description = "Nome della collezione") String collection,
-            @ToolParam(description = "Filtro JSON, es: {\"status\": \"active\"}", required = false) String filter,
-            @ToolParam(description = "Proiezione JSON, es: {\"name\": 1, \"_id\": 0}", required = false) String projection,
-            @ToolParam(description = "Numero massimo di documenti (default 50, max 200)", required = false) Integer limit,
-            @ToolParam(description = "Nome dell'istanza MongoDB (da mongo_list_databases). Se omesso usa la prima disponibile.", required = false) String database) {
+            @ToolParam(description = "Collection name") String collection,
+            @ToolParam(description = "JSON filter, e.g. {\"status\": \"active\"}", required = false) String filter,
+            @ToolParam(description = "JSON projection, e.g. {\"name\": 1, \"_id\": 0}", required = false) String projection,
+            @ToolParam(description = "Max number of documents (default 50, max 200)", required = false) Integer limit,
+            @ToolParam(description = "MongoDB instance name (from mongo_list_databases). If omitted, uses the first available.", required = false) String database) {
         try {
             MongoTemplate mongo = getMongo(database);
             Document filterDoc = (filter != null && !filter.isBlank())
@@ -57,11 +57,11 @@ public class MongoDbTools {
     }
 
     @Tool(name = "mongo_count",
-          description = "Conta i documenti in una collezione MongoDB, con filtro opzionale")
+          description = "Counts documents in a MongoDB collection, with optional filter")
     public Map<String, Object> count(
-            @ToolParam(description = "Nome della collezione") String collection,
-            @ToolParam(description = "Filtro JSON, es: {\"status\": \"active\"}", required = false) String filter,
-            @ToolParam(description = "Nome dell'istanza MongoDB (da mongo_list_databases). Se omesso usa la prima disponibile.", required = false) String database) {
+            @ToolParam(description = "Collection name") String collection,
+            @ToolParam(description = "JSON filter, e.g. {\"status\": \"active\"}", required = false) String filter,
+            @ToolParam(description = "MongoDB instance name (from mongo_list_databases). If omitted, uses the first available.", required = false) String database) {
         try {
             MongoTemplate mongo = getMongo(database);
             Query query;
@@ -78,9 +78,9 @@ public class MongoDbTools {
     }
 
     @Tool(name = "mongo_list_collections",
-          description = "Elenca tutte le collezioni nel database MongoDB configurato")
+          description = "Lists all collections in the configured MongoDB database")
     public List<String> listCollections(
-            @ToolParam(description = "Nome dell'istanza MongoDB (da mongo_list_databases). Se omesso usa la prima disponibile.", required = false) String database) {
+            @ToolParam(description = "MongoDB instance name (from mongo_list_databases). If omitted, uses the first available.", required = false) String database) {
         try {
             return getMongo(database).getCollectionNames().stream()
                     .sorted()
@@ -91,12 +91,12 @@ public class MongoDbTools {
     }
 
     @Tool(name = "mongo_aggregate",
-          description = "Esegue una pipeline di aggregazione MongoDB su una collezione. La pipeline e' un JSON array di stage.")
+          description = "Executes a MongoDB aggregation pipeline on a collection. The pipeline is a JSON array of stages.")
     public List<Map<String, Object>> aggregate(
-            @ToolParam(description = "Nome della collezione") String collection,
-            @ToolParam(description = "Pipeline JSON array, es: [{\"$match\":{\"status\":\"active\"}},{\"$group\":{\"_id\":\"$category\",\"total\":{\"$sum\":1}}}]")
+            @ToolParam(description = "Collection name") String collection,
+            @ToolParam(description = "Pipeline JSON array, e.g. [{\"$match\":{\"status\":\"active\"}},{\"$group\":{\"_id\":\"$category\",\"total\":{\"$sum\":1}}}]")
             String pipelineJson,
-            @ToolParam(description = "Nome dell'istanza MongoDB (da mongo_list_databases). Se omesso usa la prima disponibile.", required = false) String database) {
+            @ToolParam(description = "MongoDB instance name (from mongo_list_databases). If omitted, uses the first available.", required = false) String database) {
         try {
             MongoTemplate mongo = getMongo(database);
             List<Document> pipeline = Document.parse("{\"p\":" + pipelineJson + "}")
@@ -115,7 +115,7 @@ public class MongoDbTools {
     }
 
     @Tool(name = "mongo_list_databases",
-          description = "Elenca le istanze MongoDB configurate nel server MCP. Ogni nome puo' essere usato come parametro 'database' negli altri tool MongoDB.")
+          description = "Lists the MongoDB instances configured in the MCP server. Each name can be used as the 'database' parameter in other MongoDB tools.")
     public List<String> listDatabases() {
         return new ArrayList<>(registry.keySet());
     }
